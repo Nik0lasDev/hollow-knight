@@ -43,14 +43,60 @@ for(const e of enemies){if(!e.alive)continue;e.phase+=dt;e.hit=Math.max(0,e.hit-
 e.vy+=1350*dt;e.x=clamp(e.x+e.vx*dt,0,world.width-e.w);e.y+=e.vy*dt;e.onGround=false;if(e.y+e.h>=world.ground){e.y=world.ground-e.h;e.vy=0;e.onGround=true}for(const p of world.platforms){if(e.vy>=0&&e.x+e.w>p.x&&e.x<p.x+p.w&&e.y+e.h>=p.y&&e.y+e.h-e.vy*dt<=p.y){e.y=p.y-e.h;e.vy=0;e.onGround=true}}if(e.x<4||e.x+e.w>world.width-4)e.vx*=-1}
 for(let i=particles.length-1;i>=0;i--){let p=particles[i];p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=420*dt;if(p.life<=0)particles.splice(i,1)}
 cam=clamp(player.x-W*.38,0,world.width-W);if(Math.random()<.02)updateHud()}
-function background(){let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#111a2b');g.addColorStop(.62,'#26384b');g.addColorStop(1,'#111a25');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.save();ctx.translate(-cam*.18,0);ctx.fillStyle='#293b50';for(let i=0;i<16;i++){let x=i*300-50;ctx.beginPath();ctx.moveTo(x,H*.67);ctx.lineTo(x+80,H*.34+Math.sin(i)*24);ctx.lineTo(x+190,H*.67);ctx.fill()}ctx.fillStyle='#1b2a3c';for(let i=0;i<22;i++){let x=i*190;ctx.fillRect(x,H*.48,18,H*.25);ctx.fillRect(x-12,H*.48,42,7);ctx.fillRect(x+4,H*.43,10,12);ctx.fillStyle='#344a5e';ctx.fillRect(x+2,H*.49,3,H*.22);ctx.fillStyle='#1b2a3c'}ctx.restore();let glow=ctx.createRadialGradient(W*.72,H*.18,5,W*.72,H*.18,Math.max(W,H)*.55);glow.addColorStop(0,'#9bc8e41c');glow.addColorStop(1,'#9bc8e400');ctx.fillStyle=glow;ctx.fillRect(0,0,W,H)}
-function drawPlayer(){let x=player.x,y=player.y;const moving=Math.abs(player.vx)>35&&player.onGround;const stride=moving?Math.sin(player.anim*15)*5:Math.sin(player.anim*3)*1.2;const bob=player.onGround?Math.abs(Math.sin(player.anim*(moving?15:3)))*(moving?2.5:.7):0;ctx.save();ctx.translate(x+player.w/2,y+bob);if(player.invuln>0&&Math.floor(elapsed*20)%2===0)ctx.globalAlpha=.45;ctx.translate(-player.w/2,0);
-ctx.fillStyle='#0c1421';ctx.beginPath();ctx.ellipse(player.w/2,player.h-1,20,5,0,0,Math.PI*2);ctx.fill();
-ctx.fillStyle='#dce8f2';ctx.beginPath();ctx.moveTo(5,20);ctx.quadraticCurveTo(0,4,10,0);ctx.quadraticCurveTo(26,-5,29,10);ctx.lineTo(27,22);ctx.quadraticCurveTo(17,29,5,20);ctx.fill();
-ctx.fillStyle='#26384b';ctx.fillRect(6,21,21,22);ctx.fillStyle='#e8f0f7';ctx.fillRect(10,10,4,3);ctx.fillRect(21,10,4,3);
-ctx.fillStyle='#b8c9d8';ctx.beginPath();ctx.moveTo(4,38);ctx.lineTo(29,38);ctx.lineTo(35,52);ctx.lineTo(0,52);ctx.fill();
-ctx.fillStyle='#f0f6fc';ctx.fillRect(5,45,8,7);ctx.fillRect(21,45,8,7);
-if(player.attack>0){ctx.save();ctx.translate(player.w/2,25);ctx.scale(player.face,1);ctx.strokeStyle='#dff6ff';ctx.lineWidth=5;ctx.lineCap='round';ctx.beginPath();ctx.arc(18,0,35,-1.02,.72);ctx.stroke();ctx.strokeStyle='#7acde8';ctx.lineWidth=2;ctx.beginPath();ctx.arc(18,0,40,-.98,.68);ctx.stroke();ctx.globalAlpha=.5;ctx.lineWidth=1;ctx.beginPath();ctx.arc(18,0,46,-.88,.52);ctx.stroke();ctx.restore()}else{ctx.strokeStyle='#dce9f5';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(player.face>0?24:8,29);ctx.lineTo(player.face>0?38:0,24);ctx.stroke()}ctx.restore()}
+function background(){
+ const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#080f20');g.addColorStop(.48,'#18283b');g.addColorStop(1,'#090f1a');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ // Lua velada, névoa e camadas de montanhas com paralaxe.
+ ctx.save();ctx.translate(-cam*.08,0);
+ const moon=ctx.createRadialGradient(W*.76,H*.2,2,W*.76,H*.2,95);moon.addColorStop(0,'#d7e8ef55');moon.addColorStop(.25,'#a8c9dd22');moon.addColorStop(1,'#a8c9dd00');ctx.fillStyle=moon;ctx.fillRect(W*.76-100,H*.2-100,200,200);
+ ctx.fillStyle='#b9d1df';ctx.globalAlpha=.55;ctx.beginPath();ctx.arc(W*.76,H*.2,27,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ ctx.fillStyle='#1d3045';for(let i=0;i<20;i++){let x=i*260-100;ctx.beginPath();ctx.moveTo(x,H*.72);ctx.lineTo(x+65,H*.42+Math.sin(i*1.7)*20);ctx.lineTo(x+145,H*.58);ctx.lineTo(x+220,H*.72);ctx.fill()}
+ ctx.restore();
+ ctx.save();ctx.translate(-cam*.22,0);ctx.fillStyle='#101d2c';for(let i=0;i<28;i++){let x=i*180;let base=H*.72;ctx.fillRect(x,base-110,14,110);ctx.fillRect(x-12,base-116,38,8);ctx.fillRect(x+3,base-132,8,20);ctx.fillStyle='#273c50';ctx.fillRect(x+3,base-106,3,74);ctx.fillStyle='#101d2c'}
+ // Ruínas arqueadas ao fundo.
+ for(let i=0;i<12;i++){let x=i*420+90;ctx.strokeStyle='#31465a';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(x,H*.72);ctx.lineTo(x,H*.55);ctx.quadraticCurveTo(x+35,H*.47,x+70,H*.55);ctx.lineTo(x+70,H*.72);ctx.stroke();ctx.fillStyle='#1b2c3f';ctx.fillRect(x-9,H*.72-3,88,8)}
+ ctx.restore();
+ const fog=ctx.createLinearGradient(0,H*.48,0,H);fog.addColorStop(0,'#8db7cf00');fog.addColorStop(.7,'#789bb515');fog.addColorStop(1,'#03081270');ctx.fillStyle=fog;ctx.fillRect(0,0,W,H);
+ const vignette=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*.18,W/2,H/2,Math.max(W,H)*.72);vignette.addColorStop(0,'#00000000');vignette.addColorStop(1,'#020711a8');ctx.fillStyle=vignette;ctx.fillRect(0,0,W,H);
+}
+function drawPlayer(){
+ const x=player.x,y=player.y, moving=Math.abs(player.vx)>35&&player.onGround;
+ const run=Math.sin(player.anim*15), idle=Math.sin(player.anim*3), bob=player.onGround?Math.abs(run)*(moving?2.5:.7):0;
+ ctx.save();ctx.translate(x+player.w/2,y+bob);
+ if(player.invuln>0&&Math.floor(elapsed*20)%2===0)ctx.globalAlpha=.45;
+ // Sombra suave e corpo com silhueta de cavaleiro ilustrada.
+ ctx.fillStyle='#050a12a8';ctx.beginPath();ctx.ellipse(0,player.h+1,22,5,0,0,Math.PI*2);ctx.fill();
+ // Pernas animadas separadamente.
+ ctx.strokeStyle='#c4d4e1';ctx.lineWidth=7;ctx.lineCap='round';
+ ctx.beginPath();ctx.moveTo(-6,39);ctx.lineTo(-8+run*(moving?4:1),48);ctx.stroke();
+ ctx.beginPath();ctx.moveTo(7,39);ctx.lineTo(9-run*(moving?4:1),48);ctx.stroke();
+ ctx.strokeStyle='#f0f5fa';ctx.lineWidth=5;
+ ctx.beginPath();ctx.moveTo(-9+run*(moving?4:1),49);ctx.lineTo(-2+run*(moving?4:1),49);ctx.stroke();
+ ctx.beginPath();ctx.moveTo(6-run*(moving?4:1),49);ctx.lineTo(13-run*(moving?4:1),49);ctx.stroke();
+ // Capa ondulante em três pontas.
+ ctx.fillStyle='#344a62';ctx.beginPath();ctx.moveTo(-7,20);ctx.quadraticCurveTo(-21,25,-19+idle*2,39);ctx.lineTo(-11,35);ctx.lineTo(-7,46);ctx.lineTo(0,39);ctx.lineTo(7,45);ctx.lineTo(12,29);ctx.lineTo(7,20);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#536c83';ctx.beginPath();ctx.moveTo(-8,23);ctx.quadraticCurveTo(-14,30,-13+idle*2,36);ctx.lineTo(-7,32);ctx.lineTo(0,36);ctx.lineTo(5,27);ctx.closePath();ctx.fill();
+ // Túnica e ombreiras com contorno.
+ ctx.fillStyle='#101b2a';ctx.beginPath();ctx.moveTo(-10,20);ctx.lineTo(9,20);ctx.lineTo(12,39);ctx.lineTo(7,44);ctx.lineTo(-9,42);ctx.lineTo(-13,34);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#9fb5c8';ctx.beginPath();ctx.moveTo(-11,23);ctx.lineTo(-6,20);ctx.lineTo(7,20);ctx.lineTo(11,25);ctx.lineTo(8,37);ctx.lineTo(0,41);ctx.lineTo(-8,37);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#d9e5ee';ctx.fillRect(-7,24,14,10);ctx.fillStyle='#6b8297';ctx.fillRect(-5,26,10,2);
+ // Cabeça branca com chifres assimétricos, mais próxima de uma silhueta desenhada.
+ ctx.fillStyle='#080f1a';ctx.beginPath();ctx.moveTo(-11,15);ctx.lineTo(-15,3);ctx.lineTo(-7,7);ctx.quadraticCurveTo(-8,-5,0,-6);ctx.quadraticCurveTo(10,-5,9,5);ctx.lineTo(15,0);ctx.lineTo(12,15);ctx.quadraticCurveTo(0,23,-11,15);ctx.fill();
+ ctx.fillStyle='#e5eef5';ctx.beginPath();ctx.moveTo(-10,13);ctx.lineTo(-13,3);ctx.lineTo(-6,8);ctx.quadraticCurveTo(-7,-2,0,-3);ctx.quadraticCurveTo(9,-2,8,7);ctx.lineTo(13,2);ctx.lineTo(10,14);ctx.quadraticCurveTo(0,20,-10,13);ctx.fill();
+ ctx.fillStyle='#26384b';ctx.beginPath();ctx.moveTo(-8,13);ctx.quadraticCurveTo(0,18,8,13);ctx.lineTo(6,17);ctx.lineTo(-6,17);ctx.fill();
+ // Olhos escuros acompanham a direção.
+ ctx.fillStyle='#101a29';ctx.beginPath();ctx.ellipse(player.face*4,11,2.5,3.5,0,0,Math.PI*2);ctx.fill();
+ // Espada com brilho e arco durante o ataque.
+ ctx.save();ctx.translate(player.face*9,29);ctx.scale(player.face,1);
+ if(player.attack>0){
+   ctx.globalAlpha=.25;ctx.strokeStyle='#e6f8ff';ctx.lineWidth=12;ctx.beginPath();ctx.arc(9,-2,36,-1.05,.78);ctx.stroke();
+   ctx.globalAlpha=1;ctx.strokeStyle='#effaff';ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();ctx.arc(9,-2,36,-1.05,.78);ctx.stroke();
+   ctx.strokeStyle='#74cfe8';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(9,-2,42,-.98,.7);ctx.stroke();
+ } else {
+   ctx.strokeStyle='#dce8f2';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(13,-7);ctx.stroke();
+   ctx.strokeStyle='#87a9c1';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-2,1);ctx.lineTo(2,-1);ctx.stroke();
+ }
+ ctx.restore();ctx.restore();
+}
 function drawEnemy(e){let x=e.x,y=e.y;const idle=Math.sin(elapsed*4+e.phase)*1.5;ctx.save();ctx.translate(x+e.w/2,y+idle);if(e.hit>0)ctx.globalAlpha=.55;ctx.fillStyle='#0d1420';ctx.beginPath();ctx.ellipse(0,e.h-1,e.w*.62,4,0,0,Math.PI*2);ctx.fill();if(e.type==='brute'){ctx.fillStyle='#785c69';ctx.beginPath();ctx.moveTo(-e.w/2,12);ctx.lineTo(-e.w/2+4,0);ctx.lineTo(-7,5);ctx.lineTo(3,-3);ctx.lineTo(e.w/2,4);ctx.lineTo(e.w/2,32);ctx.lineTo(10,e.h);ctx.lineTo(-e.w/2,e.h);ctx.fill();ctx.fillStyle='#f2c3ce';ctx.fillRect(-12,15,5,4);ctx.fillRect(7,15,5,4)}else if(e.type==='hopper'){ctx.fillStyle='#7bb4a2';ctx.beginPath();ctx.ellipse(0,e.h*.55,17,19,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#c6f5d8';ctx.fillRect(-10,10,5,5);ctx.fillRect(5,10,5,5);ctx.fillStyle='#4b7f78';ctx.fillRect(-14,e.h-9,10,9);ctx.fillRect(5,e.h-9,10,9)}else{ctx.fillStyle='#a3a9c1';ctx.beginPath();ctx.ellipse(0,e.h*.58,18,15,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#202b3e';ctx.fillRect(-11,13,5,4);ctx.fillRect(6,13,5,4);ctx.fillStyle='#6b7591';ctx.fillRect(-12,e.h-6,8,6);ctx.fillRect(5,e.h-6,8,6)}ctx.restore();if(e.hp<e.maxHp){ctx.fillStyle='#101725';ctx.fillRect(x,y-9,e.w,4);ctx.fillStyle='#b9e5f0';ctx.fillRect(x,y-9,e.w*e.hp/e.maxHp,4)}}
 function draw(){background();ctx.save();ctx.translate(-cam,0);
 const gy=world.ground;ctx.fillStyle='#121d2b';ctx.fillRect(0,gy,world.width,H-gy);ctx.fillStyle='#6f879a';ctx.fillRect(0,gy,world.width,3);ctx.fillStyle='#26384a';ctx.fillRect(0,gy+4,world.width,5);for(let x=0;x<world.width;x+=70){ctx.strokeStyle='#2b3e51';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,gy+5);ctx.lineTo(x+20,gy+rand(18,32));ctx.stroke();ctx.fillStyle='#26394b';ctx.fillRect(x+15,gy+35,24,4)}
