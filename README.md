@@ -55,14 +55,15 @@ O projeto usa **HTML5 Canvas e JavaScript puro**: não precisa de bibliotecas ex
 
 ## 🚀 Entrar no jogo
 
-Use o botão **▶ JOGAR AGORA** no topo para abrir a versão jogável no navegador. Se o endereço ainda não abrir, é necessário ativar a publicação do GitHub Pages uma única vez:
+Use o botão **▶ JOGAR AGORA** no topo para abrir a versão jogável no navegador. Se aparecer erro 404, ative a publicação uma única vez:
 
-1. Abra **Settings → Pages** neste repositório.
-2. Em **Build and deployment**, escolha **Deploy from a branch**.
-3. Selecione a branch `main` e a pasta `/ (root)` e clique em **Save**.
-4. Aguarde a publicação e acesse [nik0lasdev.github.io/hollow-knight](https://nik0lasdev.github.io/hollow-knight/).
+1. Abra [**Settings → Pages**](https://github.com/Nik0lasDev/hollow-knight/settings/pages) neste repositório.
+2. Em **Build and deployment → Source**, selecione **GitHub Actions**.
+3. Salve, se o GitHub mostrar essa opção. O repositório já contém um workflow que publica o jogo automaticamente.
+4. Abra a aba [**Actions**](https://github.com/Nik0lasDev/hollow-knight/actions), entre na execução **Publicar jogo no GitHub Pages** e aguarde ficar verde (sucesso).
+5. Acesse [nik0lasdev.github.io/hollow-knight](https://nik0lasdev.github.io/hollow-knight/). A primeira publicação pode levar alguns minutos.
 
-Depois da publicação, o botão do README leva diretamente ao jogo — não à página do código.
+Depois que a execução do workflow terminar com sucesso, o botão do README leva diretamente ao jogo — não à página do código.
 
 ### Executar localmente
 
