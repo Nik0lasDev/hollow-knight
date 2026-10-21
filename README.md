@@ -18,7 +18,7 @@
   <img alt="Idioma" src="https://img.shields.io/badge/idioma-pt--BR-c7a6df?style=for-the-badge">
 </p>
 
-[**▶ Jogar / abrir o projeto**](./index.html) · [Reportar um problema](../../issues)
+[**▶ JOGAR AGORA**](https://nik0lasdev.github.io/hollow-knight/) · [Ver código-fonte](./blob/main/index.html) · [Reportar um problema](../../issues)
 
 </div>
 
@@ -53,15 +53,24 @@ O projeto usa **HTML5 Canvas e JavaScript puro**: não precisa de bibliotecas ex
 | Atacar | `J`, `Z` ou clique esquerdo | **GOLPE** |
 | Esquivar | `Shift` ou `K` | **DASH** |
 
-## 🚀 Como executar
+## 🚀 Entrar no jogo
 
-### Opção 1 — abrir localmente
+Use o botão **▶ JOGAR AGORA** no topo para abrir a versão jogável no navegador. Se o endereço ainda não abrir, é necessário ativar a publicação do GitHub Pages uma única vez:
+
+1. Abra **Settings → Pages** neste repositório.
+2. Em **Build and deployment**, escolha **Deploy from a branch**.
+3. Selecione a branch `main` e a pasta `/ (root)` e clique em **Save**.
+4. Aguarde a publicação e acesse [nik0lasdev.github.io/hollow-knight](https://nik0lasdev.github.io/hollow-knight/).
+
+Depois da publicação, o botão do README leva diretamente ao jogo — não à página do código.
+
+### Executar localmente
 
 1. Faça o download ou clone este repositório.
 2. Abra o arquivo `index.html` em um navegador moderno.
 3. Clique em **Entrar nas ruínas** e comece a jogar.
 
-### Opção 2 — usar um servidor local
+### Alternativa — usar um servidor local
 
 Se preferir executar por um servidor HTTP, abra o terminal na pasta do projeto e rode:
 
@@ -70,13 +79,6 @@ python -m http.server 8000
 ```
 
 Depois, acesse [http://localhost:8000](http://localhost:8000).
-
-### Opção 3 — publicar com GitHub Pages
-
-1. Entre em **Settings → Pages** no repositório.
-2. Em **Build and deployment**, selecione **Deploy from a branch**.
-3. Escolha a branch `main` e a pasta `/ (root)`.
-4. Salve e aguarde a publicação. O GitHub exibirá o endereço do site nessa página.
 
 ## 🗂️ Estrutura
 
